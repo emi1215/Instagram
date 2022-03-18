@@ -344,6 +344,24 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
+  - CLImageEditor/AllTools (0.2.4):
+    - CLImageEditor/Core
+    - CLImageEditor/EmoticonTool
+    - CLImageEditor/ResizeTool
+    - CLImageEditor/SplashTool
+    - CLImageEditor/StickerTool
+    - CLImageEditor/TextTool
+  - CLImageEditor/Core (0.2.4)
+  - CLImageEditor/EmoticonTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/ResizeTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/SplashTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/StickerTool (0.2.4):
+    - CLImageEditor/Core
+  - CLImageEditor/TextTool (0.2.4):
+    - CLImageEditor/Core
   - Firebase (8.9.1):
     - Firebase/Core (= 8.9.1)
   - Firebase/Analytics (8.9.1):
@@ -498,19 +516,23 @@ PODS:
   - SDWebImage (5.12.4):
     - SDWebImage/Core (= 5.12.4)
   - SDWebImage/Core (5.12.4)
+  - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
+  - CLImageEditor/AllTools (= 0.2.4)
   - Firebase (= 8.9.1)
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Firestore
   - Firebase/Storage
   - FirebaseUI/Storage
+  - SVProgressHUD (= 2.2.5)
 
 SPEC REPOS:
   trunk:
     - abseil
     - BoringSSL-GRPC
+    - CLImageEditor
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -531,10 +553,12 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SDWebImage
+    - SVProgressHUD
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
+  CLImageEditor: dc3e5358f641368da3a76fc1c744a4c2ceb270ad
   Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
   FirebaseAnalytics: 4ab446ce08a3fe52e8a4303dd997cf26276bf968
   FirebaseAuth: 2b78b2a32c07b3ecfa4970bdf1d3632b8304099b
@@ -555,7 +579,8 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 9c3ba538bbd222f2340fd0375361eea3e494b83f
+PODFILE CHECKSUM: 03ef62185426daafb5ac891f39975f431692c09e
 
 COCOAPODS: 1.11.2
