@@ -66,8 +66,24 @@ class HomeViewController: UIViewController,UITableViewDataSource, UITableViewDel
             cell.setPostData(postArray[indexPath.row])
         
         cell.likeButton.addTarget(self, action:#selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.comentWriteButton.addTarget(self, action:#selector(touchWriteButton(_:forEvent:)), for: .touchUpInside)
 
         return cell
+    }
+    
+    @objc func touchWriteButton(_ sender: UIButton, forEvent event: UIEvent){
+        
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+
+            // 配列からタップされたインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+        let comentViewController = self.storyboard?.instantiateViewController(withIdentifier: "comentView") as! ComentWriteViewController
+        comentViewController.id = postData.id
+        self.present(comentViewController, animated: true, completion: nil)
     }
     
     @objc func handleButton(_ sender: UIButton, forEvent event: UIEvent) {
