@@ -31,6 +31,13 @@ class PostTableViewCell: UITableViewCell {
     
     func setPostData(_ postData: PostData) {
         
+        // コメントの表示
+            var comments = ""
+            for comment in postData.comments {
+              comments += "\(comment)\n"
+            }
+            self.comentHyoujiLabel.text = comments
+        
          postImageView.sd_imageIndicator = SDWebImageActivityIndicator.gray
          let imageRef = Storage.storage().reference().child(Const.ImagePath).child(postData.id + ".jpg")
          postImageView.sd_setImage(with: imageRef)
@@ -58,10 +65,4 @@ class PostTableViewCell: UITableViewCell {
           }
         }
     
-    // コメントの表示
-        var comments = ""
-        for comment in postData.comments {
-          comments += "\(comment)\n"
-        }
-        self.commentHyoujiLabel.text = comments
 }
