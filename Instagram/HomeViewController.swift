@@ -8,73 +8,68 @@
 import UIKit
 import Firebase
 
-class HomeViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
-    
+class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     var postArray: [PostData] = []
-    
-    var listener: ListenerRegistration!
 
-    override func viewDidLoad() {
-           super.viewDidLoad()
+        // Firestoreのリスナー
+        var listener: ListenerRegistration?
 
-           tableView.delegate = self
-           tableView.dataSource = self
+        override func viewDidLoad() {
+            super.viewDidLoad()
 
-           // カスタムセルを登録する
-           let nib = UINib(nibName: "PostTableViewCell", bundle: nil)
-           tableView.register(nib, forCellReuseIdentifier: "Cell")
-       }
+            tableView.delegate = self
+            tableView.dataSource = self
 
-       override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           print("DEBUG_PRINT: viewWillAppear")
-           // ログイン済みか確認
-           if Auth.auth().currentUser != nil {
-               
-           let postsRef = Firestore.firestore().collection(Const.PostPath).order(by: "date", descending: true)
-               listener = postsRef.addSnapshotListener() { (querySnapshot, error) in
-            if let error = error {
-            print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
-            return
-            }
-                         // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
-            self.postArray = querySnapshot!.documents.map { document in
-            print("DEBUG_PRINT: document取得 \(document.documentID)")
-            let postData = PostData(document: document)
-            return postData
-            }
-                         // TableViewの表示を更新する
-            self.tableView.reloadData()
+            // カスタムセルを登録する
+            let nib = UINib(nibName: "PostTableViewCell", bundle: nil)
+            tableView.register(nib, forCellReuseIdentifier: "Cell")
+        }
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            print("DEBUG_PRINT: viewWillAppear")
+            // ログイン済みか確認
+            if Auth.auth().currentUser != nil {
+                // listenerを登録して投稿データの更新を監視する
+                let postsRef = Firestore.firestore().collection(Const.PostPath).order(by: "date", descending: true)
+                listener = postsRef.addSnapshotListener() { (querySnapshot, error) in
+                    if let error = error {
+                        print("DEBUG_PRINT: snapshotの取得が失敗しました。 \(error)")
+                        return
+                    }
+                    // 取得したdocumentをもとにPostDataを作成し、postArrayの配列にする。
+                    self.postArray = querySnapshot!.documents.map { document in
+                        print("DEBUG_PRINT: document取得 \(document.documentID)")
+                        let postData = PostData(document: document)
+                        return postData
+                    }
+                    // TableViewの表示を更新する
+                    self.tableView.reloadData()
                 }
-               
-            } else {
-                     // ログイン未(またはログアウト済み)
-              if listener != nil {
-                       // listener登録済みなら削除してpostArrayをクリアする
-                 listener.remove()
-                 listener = nil
-                 postArray = []
-                 tableView.reloadData()
             }
-       }
+        }
 
-       func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-           return postArray.count
-       }
+        override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            print("DEBUG_PRINT: viewWillDisappear")
+            // listenerを削除して監視を停止する
+            listener?.remove()
+        }
 
-       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-           // セルを取得してデータを設定する
-           let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
-           cell.setPostData(postArray[indexPath.row])
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return postArray.count
+        }
 
-           return cell
-       }
-    
-    
-    
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            // セルを取得してデータを設定する
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
+            cell.setPostData(postArray[indexPath.row])
 
+            return cell
+        }
+    }
     /*
     // MARK: - Navigation
 
@@ -85,5 +80,4 @@ class HomeViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     */
 
-}
-}
+
