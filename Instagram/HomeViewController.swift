@@ -48,7 +48,7 @@ class HomeViewController: UIViewController,UITableViewDataSource, UITableViewDel
                          // TableViewの表示を更新する
             self.tableView.reloadData()
                 }
-            }
+               
             } else {
                      // ログイン未(またはログアウト済み)
               if listener != nil {
@@ -85,4 +85,5 @@ class HomeViewController: UIViewController,UITableViewDataSource, UITableViewDel
     }
     */
 
+}
 }
