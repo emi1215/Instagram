@@ -72,10 +72,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // セル内のボタンのアクションをソースコードで設定する
                 cell.likeButton.addTarget(self, action:#selector(likeButton(_:forEvent:)), for: UIControl.Event.touchUpInside)
 
-                cell.likeButton.addTarget(self, action:#selector(likeButton(_:forEvent:)), for: .touchUpInside)
-            
-            cell.comentWriteButton.addTarget(self, action:#selector(comentWriteButton(_:forEvent:)), for: UIControl.Event.touchUpInside)
-
             cell.comentWriteButton.addTarget(self, action:#selector(comentWriteButton(_:forEvent:)), for: .touchUpInside)
                  
 
@@ -109,36 +105,23 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
           postRef.updateData(["likes": updateValue])
         }
       }
+
+    @objc func comentWriteButton(_ sender: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: likeボタンがタップされました。")
+
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+
+        let comentWriteViewController = self.storyboard?.instantiateViewController(withIdentifier: "comentView") as!    ComentWriteViewController
+        comentWriteViewController.id = postData.id
+                self.present(comentWriteViewController, animated: true, completion: nil)
+
     }
-
-@objc func comentWriteButton(_ sender: UIButton, forEvent event: UIEvent) {
-    print("DEBUG_PRINT: likeボタンがタップされました。")
-
-    // タップされたセルのインデックスを求める
-    let touch = event.allTouches?.first
-    let point = touch!.location(in: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: point)
-
-    // 配列からタップされたインデックスのデータを取り出す
-    let postData = postArray[indexPath!.row]
-
-    // likesを更新する
-    if let myid = Auth.auth().currentUser?.uid {
-      // 更新データを作成する
-      var updateValue: FieldValue
-      if postData.isLiked {
-        // すでにいいねをしている場合は、いいね解除のためmyidを取り除く更新データを作成
-        updateValue = FieldValue.arrayRemove([myid])
-      } else {
-        // 今回新たにいいねを押した場合は、myidを追加する更新データを作成
-        updateValue = FieldValue.arrayUnion([myid])
-      }
-      // likesに更新データを書き込む
-      let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
-      postRef.updateData(["likes": updateValue])
-    }
-  }
-}
 
     
     /*
@@ -152,3 +135,4 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     */
 
 
+}
